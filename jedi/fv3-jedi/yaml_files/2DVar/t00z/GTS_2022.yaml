@@ -58,8 +58,15 @@
         where:
         - variable:
             name: MetaData/stationIdentification
-          is_in: [71120,71397,71621,71727,71816]
-          size where true: 5
+          is_in: [71621 # from North America
+         , 10863, 16179 # from Europe
+         , 40550, 40580, 40582, 40587, 40592 # Mid East
+         , 47005, 47008, 47014, 47016, 47020, 47022, 47025, 47028, 47031, 47035 # from North Korea
+         , 47037, 47039, 47041, 47046, 47050, 47052, 47055, 47058, 47060, 47061
+         , 47065, 47067, 47068, 47069, 47070, 47069, 47070, 47075, 47090, 47095
+         , 47098, 47101, 47102
+         , 48698, 48830 # from Singapore
+         , 65250] # from Africa
       obs post filters:
       - filter: Background Check # gross error check
         filter variables:

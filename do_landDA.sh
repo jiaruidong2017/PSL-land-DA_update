@@ -221,8 +221,10 @@ for ii in "${!OBS_TYPES[@]}"; # loop through requested obs
 do 
 
   # get the obs file name 
-  if [ ${OBS_TYPES[$ii]} == "GTS" ]; then
+  if [ ${OBS_TYPES[$ii]} == "SFCSNO" ]; then
      obsfile=$OBSDIR/snow_depth/GTS/data_proc/${YYYY}${MM}/sfcsno_snow_${YYYY}${MM}${DD}${HH}.nc4
+  elif [ ${OBS_TYPES[$ii]} == "MADIS" ]; then
+     obsfile=$OBSDIR/snow_depth/MADIS/data_proc/v3/${YYYY}/madis_snow_${YYYY}${MM}${DD}_${HH}00.nc
   elif [ ${OBS_TYPES[$ii]} == "GHCN" ]; then 
   # GHCN are time-stamped at 18. If assimilating at 00, need to use previous day's obs, so that 
   # obs are within DA window.
@@ -346,9 +348,14 @@ if [[ $do_DA == "YES" ]]; then
 
       for ii in "${!OBS_TYPES[@]}";
       do 
-        if [ ${JEDI_TYPES[$ii]} == "DA" ]; then
+        if [[ ${JEDI_TYPES[$ii]} == "DA" && ${OBS_TYPES[$ii]} != "GTS" ]]; then
         cat ${LANDDADIR}/jedi/fv3-jedi/yaml_files/${DAalg}/${OBS_TYPES[$ii]}.yaml >> jedi_DA.yaml
         fi 
+        if [[ ${JEDI_TYPES[$ii]} == "DA" && ${OBS_TYPES[$ii]} == "GTS" ]]; then
+        M1=`echo $MM | cut -c1-1`
+        YYYY2=`expr $YYYY + $M1 - 1`
+        cat ${LANDDADIR}/jedi/fv3-jedi/yaml_files/${DAalg}/t${HH}z/${OBS_TYPES[$ii]}_${YYYY2}.yaml >> jedi_DA.yaml
+        fi
       done
 
    else # use specified yaml 
